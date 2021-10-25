@@ -61,7 +61,6 @@ apigClientFactory.newClient = function (config) {
     invokeUrl = `https://${window.config.restApiId}.execute-api.${window.config.region}.amazonaws.com/prod`
     endpoint = /(^https?:\/\/[^\/]+)/g.exec(invokeUrl)[1]
     }
-    console.log(endpoint)
     var sigV4ClientConfig = {
         accessKey: config.accessKey,
         secretKey: config.secretKey,
@@ -72,7 +71,6 @@ apigClientFactory.newClient = function (config) {
         defaultContentType: config.defaultContentType,
         defaultAcceptType: config.defaultAcceptType
     };
-    console.log(sigV4ClientConfig)
     var authType = 'NONE';
     if (sigV4ClientConfig.accessKey !== undefined && sigV4ClientConfig.accessKey !== '' && sigV4ClientConfig.secretKey !== undefined && sigV4ClientConfig.secretKey !== '') {
         authType = 'AWS_IAM';
