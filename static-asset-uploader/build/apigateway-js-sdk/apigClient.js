@@ -17,6 +17,7 @@
 var apigClientFactory = {};
 apigClientFactory.newClient = function (config) {
     var apigClient = { };
+    let invokeUrl, endpoint;
     if(config === undefined) {
         config = {
             accessKey: '',
@@ -51,11 +52,14 @@ apigClientFactory.newClient = function (config) {
     if(config.defaultAcceptType === undefined) {
         config.defaultAcceptType = 'application/json';
     }
-
-    // extract endpoint and path from url
-    let invokeUrl = `https://${window.config.restApiId}.execute-api.${window.config.region}.amazonaws.com/prod`,
-        endpoint = /(^https?:\/\/[^\/]+)/g.exec(invokeUrl)[1],
-        pathComponent = invokeUrl.substring(endpoint.length)
+    
+    if (window.config.apiGatewayCustomDomainName != null) {
+        endpoint = `https://${window.config.apiGatewayCustomDomainName}`
+    }
+    else {
+        invokeUrl = `https://${window.config.restApiId}.execute-api.${window.config.region}.amazonaws.com/prod`;
+        endpoint = /(^https?:\/\/[^\/]+)/g.exec(invokeUrl)[1];
+    }
 
     var sigV4ClientConfig = {
         accessKey: config.accessKey,
@@ -90,7 +94,7 @@ apigClientFactory.newClient = function (config) {
 
         var rootOptionsRequest = {
             verb: 'options'.toUpperCase(),
-            path: pathComponent + uritemplate('/').expand(apiGateway.core.utils.parseParametersToObject(params, [])),
+            path: uritemplate('/').expand(apiGateway.core.utils.parseParametersToObject(params, [])),
             headers: apiGateway.core.utils.parseParametersToObject(params, []),
             queryParams: apiGateway.core.utils.parseParametersToObject(params, []),
             body: body
@@ -108,7 +112,7 @@ apigClientFactory.newClient = function (config) {
 
         var proxyOptionsRequest = {
             verb: 'GET',
-            path: pathComponent + path,
+            path: path,
             headers: apiGateway.core.utils.parseParametersToObject(params, []),
             queryParams: apiGateway.core.utils.parseParametersToObject(params, ['start', 'end', 'sdkType']),
             body: body
@@ -124,7 +128,7 @@ apigClientFactory.newClient = function (config) {
 
         var proxyOptionsRequest = {
             verb: 'POST',
-            path: pathComponent + path,
+            path: path,
             headers: apiGateway.core.utils.parseParametersToObject(params, []),
             queryParams: apiGateway.core.utils.parseParametersToObject(params, []),
             body: body
@@ -141,7 +145,7 @@ apigClientFactory.newClient = function (config) {
 
         var proxyOptionsRequest = {
             verb: 'PUT',
-            path: pathComponent + path,
+            path: path,
             headers: apiGateway.core.utils.parseParametersToObject(params, []),
             queryParams: apiGateway.core.utils.parseParametersToObject(params, []),
             body: body
@@ -158,7 +162,7 @@ apigClientFactory.newClient = function (config) {
 
         var proxyOptionsRequest = {
             verb: 'DELETE',
-            path: pathComponent + path,
+            path: path,
             headers: apiGateway.core.utils.parseParametersToObject(params, []),
             queryParams: apiGateway.core.utils.parseParametersToObject(params, []),
             body: body
