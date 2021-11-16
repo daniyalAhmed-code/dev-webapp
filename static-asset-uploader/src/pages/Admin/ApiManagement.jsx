@@ -134,7 +134,7 @@ export const ApiManagement = observer(class ApiManagement extends React.Componen
     getApi(apiId, false, undefined, true).then(api => {
       const _api = toJS(api)
       console.log(_api)
-      const key = _api.apiStage ? `${_api.id}_${_api.apiStage}` : hash(_api.swagger)
+      const key = _api.stage ? `${_api.id}_${_api.stage}` : hash(_api.swagger)
       
       apiGatewayClientWithCredentials()
         .then(app => app.delete(`/admin/catalog/visibility/generic/${key}`, {}, {}, {}))
