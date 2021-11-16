@@ -1,0 +1,5 @@
+// const confirmationStrategy = require('../index')
+
+test('should pass', () => {
+  expect(true).toBe(true)
+})

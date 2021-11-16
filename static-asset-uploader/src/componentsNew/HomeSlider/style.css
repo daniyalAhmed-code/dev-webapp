@@ -1,0 +1,15 @@
+
+.hero-home {
+	height: 75vh;
+  background-image: url('../../assets/images/banner-one.png');
+  background: no-repeat center center scroll;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.hero-home .hero-contents{
+	color: #000000;
+
+}

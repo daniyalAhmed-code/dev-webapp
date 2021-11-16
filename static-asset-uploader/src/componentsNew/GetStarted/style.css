@@ -1,0 +1,35 @@
+.get-started h1 {
+	width: 250px;
+	line-height: 1.2;
+	border-bottom: 3px solid #01BF71;
+}
+
+.single-step {
+	-webkit-transition: .4s;
+	-moz-transition: .4s;
+	-o-transition: .4s;
+	transition: .4s;
+	z-index: 1;
+	padding: 44px 28px;
+}
+
+.step-cap h5 {
+	font-weight: bold;
+}
+
+.step-icon {
+	border-radius: 1000px;
+	background-color: #01BF71;
+	height: 80px;
+	width: 80px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.step-icon svg {
+	height: 1.8em;
+	width: 1.8em;
+	color: #ffffff;
+}
+
