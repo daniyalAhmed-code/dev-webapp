@@ -442,8 +442,12 @@ const exportTypes = [
 function fetchBlob ({ blobType, endpointName, sdkType, exportType, ext, parameters }) {
   const apiId = store.api.apiId || store.api.id
   const stageName = store.api.apiStage
-
+  let responseType
   store.api.downloadingSdkOrApi = true
+  if (ext == ".zip")
+    responseType = 'text/plain'
+  else 
+    responseType = 'blob'
 
   return apiGatewayClientWithCredentials()
     .then(apiGatewayClient => apiGatewayClient.get(
@@ -452,10 +456,12 @@ function fetchBlob ({ blobType, endpointName, sdkType, exportType, ext, paramete
       {},
       {
         queryParams: { exportType, parameters: JSON.stringify(parameters) },
-        config: { responseType: 'blob' }
+        config: { responseType: responseType }
       }
     ))
     .then(({ data }) => {
+      console.log("data")
+      console.log(data)
       downloadFile(data, `${apiId}_${stageName}-${sdkType || exportType}${ext}`)
     })
     .catch(({ data }) => data.text().then(text => {
@@ -467,18 +473,25 @@ function fetchBlob ({ blobType, endpointName, sdkType, exportType, ext, paramete
     })
 }
 
-function downloadFile (blob, fileName) {
-  const dataUri = URL.createObjectURL(blob)
+async function downloadFile (blob, fileName) {
+  let dataUri
+  if (fileName.includes(".zip"))
+    dataUri = blob
+  else
+    dataUri = URL.createObjectURL(blob)
+
   const downloadLinkElement = document.createElement('a')
   downloadLinkElement.setAttribute('href', dataUri)
   downloadLinkElement.setAttribute('download', fileName)
   downloadLinkElement.style.display = 'none'
-
+  console.log(downloadLinkElement)
   document.body.appendChild(downloadLinkElement)
   downloadLinkElement.click()
   document.body.removeChild(downloadLinkElement)
-  URL.revokeObjectURL(dataUri)
+  // URL.revokeObjectURL(dataUri)
 }
+
+
 
 function getSdk (sdkType, parameters = {}) {
   return fetchBlob({
